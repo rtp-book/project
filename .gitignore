@@ -8,7 +8,7 @@
 
 database/
 venv/
-src/__target__/
+__target__/
 dist/
 .cache/
 node_modules/
