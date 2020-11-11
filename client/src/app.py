@@ -1,26 +1,35 @@
-from common.pyreact import useState, render, createElement as el
-from common.jsutils import alert
+from common.pyreact import render, createElement as el
+from common.pymui import ThemeProvider, Paper, Typography, Container, Link
+from common.jsutils import setTitle
+from main.appTheme import theme, Flexbox, FlexboxCenter
 
-def App():
-    phrase, setPhrase = useState("")
+APP_NAME = "Library Management System"
 
-    def handleSubmit():
-        alert(f"Test phrase is : {phrase}")
-        setPhrase("")
+def App(props):
+    setTitle(props['title'])
 
-    def handleChange(event):
-        target = event['target']
-        setPhrase(target.value)
-
-    return el('div', None,
-              el('label', {'htmlFor': 'testPhrase'}, "Test Phrase: "),
-              el('input', {'id': 'testPhrase',
-                           'onChange': handleChange,
-                           'value': phrase
-                          }
-                ),
-              el('button', {'onClick': handleSubmit}, "Submit"),
+    return el(ThemeProvider, {'theme': theme},
+              el(Container, {'maxWidth': 'md'},
+                 el(Paper, {'style': {'padding': '1rem'}},
+                    el(Flexbox, {'alignItems': 'center'},
+                       el(Typography, {'variant': 'h5'}, APP_NAME)
+                      )
+                   ),
+                 el(Paper, {'style': {'padding': '0.5rem',
+                                      'marginTop': '1rem'}
+                           },
+                    el(FlexboxCenter, None,
+                       el(Link, {'href': '#', 'variant': 'h5'}, "Books")
+                      ),
+                    el(FlexboxCenter, None,
+                       el(Link, {'href': '#', 'variant': 'h5'}, "About")
+                      ),
+                    el(FlexboxCenter, None,
+                       el(Link, {'href': '#', 'variant': 'h5'}, "Login")
+                      )
+                   )
+                )
              )
 
-render(App, None, 'root')
+render(App, {'title': "Books"}, 'root')
 
