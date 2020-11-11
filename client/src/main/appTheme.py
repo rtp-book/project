@@ -73,3 +73,16 @@ FlexboxCenter = styled(Box)({
     'justifyContent': 'center'
 })
 
+modalStyles = {
+    'overlay': {'zIndex': 1000},
+    'content': {
+        'top': '35%',
+        'left': '50%',
+        'right': 'auto',
+        'bottom': 'auto',
+        'marginRight': '-50%',
+        'transform': 'translate(-50%, -50%)'
+    }
+}
+
+

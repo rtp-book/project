@@ -25,7 +25,8 @@
     "deepcopy": "^2.1.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
-    "react-ga": "^3.2.1"
+    "react-ga": "^3.2.1",
+    "react-modal": "^3.11.2"
   },
   "parcel-plugin-python": {
     "command": "python -m transcrypt",
