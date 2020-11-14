@@ -1,12 +1,12 @@
 from common.pyreact import useState, createElement as el, Fragment
 from common.pymui import Menu, MenuItem
-
-lookup_tables = ['Categories', 'Publishers', 'Conditions', 'Formats']
+from views.lookupTable.lookupView import lookup_tables
 
 
 def LandingPageMenu(props):
     mainMenu = props['mainMenu']
     mainMenuClose = props['mainMenuClose']
+    setLookupModal = props['setLookupModal']
     aboutModalOpen = props['aboutModalOpen']
     logout = props['logout']
     isLoggedIn = props['isLoggedIn']
@@ -23,7 +23,7 @@ def LandingPageMenu(props):
     def handleLookup(event):
         value = event['currentTarget']['textContent']
         lookupMenuClose()
-        print("Lookup Table:", value)
+        setLookupModal(value)
 
     def handleAbout():
         mainMenuClose()
@@ -53,10 +53,10 @@ def LandingPageMenu(props):
                         'transformOrigin': {'vertical': 'top',
                                             'horizontal': 'center'},
                        },
-                 [el(MenuItem, {'key': table,
+                 [el(MenuItem, {'key': table['name'],
                                 'onClick': handleLookup
-                               }, table) for table in lookup_tables
-                 ],
+                               }, table['name']) for table in lookup_tables
+                  ],
                 )
              )
 

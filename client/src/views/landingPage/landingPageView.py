@@ -7,6 +7,7 @@ from main.aboutModal import About
 from main.appData import appname
 from main.loginModal import Login
 from views.landingPage.landingPageMenu import LandingPageMenu
+from views.lookupTable.lookupView import LookupTable
 
 
 def LandingPage(props):
@@ -17,6 +18,7 @@ def LandingPage(props):
 
     mainMenu, setMainMenu = useState(None)
     aboutShow, setAboutShow = useState(False)
+    lookupModal, setLookupModal = useState(None)
     loginModal, setLoginModal = useState(False)
     username, setUsername = useState("")
     password, setPassword = useState("")
@@ -71,6 +73,8 @@ def LandingPage(props):
                 ),
               el(LandingPageMenu, {'mainMenu': mainMenu,
                                    'mainMenuClose': mainMenuClose,
+                                   'setLookupModal':
+                                       lambda tbl: setLookupModal(tbl),
                                    'aboutModalOpen': aboutModalOpen,
                                    'logout': logout,
                                    'isLoggedIn': isLoggedIn}
@@ -105,6 +109,9 @@ def LandingPage(props):
                 ),
               el(About, {'onClose': lambda: setAboutShow(False),
                          'modalState': aboutShow}
-                )
+                ),
+              el(LookupTable, {'table': lookupModal,
+                               'onClose': lambda: setLookupModal(None)}
+                ) if lookupModal else None
              )
 
