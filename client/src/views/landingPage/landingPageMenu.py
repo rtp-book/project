@@ -8,6 +8,8 @@ def LandingPageMenu(props):
     mainMenu = props['mainMenu']
     mainMenuClose = props['mainMenuClose']
     aboutModalOpen = props['aboutModalOpen']
+    logout = props['logout']
+    isLoggedIn = props['isLoggedIn']
 
     lookupMenu, setLookupMenu = useState(None)
 
@@ -29,7 +31,7 @@ def LandingPageMenu(props):
 
     def handleLogout():
         mainMenuClose()
-        print("Logout")
+        logout()
 
     return el(Fragment, None,
               el(Menu, {'id': 'main-menu',
@@ -41,7 +43,7 @@ def LandingPageMenu(props):
                  el(MenuItem, {'onClick': lookupMenuOpen}, "Lookup  Tables"),
                  el(MenuItem, {'onClick': handleAbout}, "About"),
                  el(MenuItem, {'onClick': handleLogout,
-                               'disabled': True}, "Logout"),
+                               'disabled': not isLoggedIn}, "Logout"),
                 ),
               el(Menu, {'id': 'lookup-menu',
                         'anchorEl': lookupMenu,

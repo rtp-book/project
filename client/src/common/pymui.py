@@ -52,3 +52,11 @@ styled = require('@material-ui/styles/styled')['default']
 makeStyles = require('@material-ui/styles/makeStyles')['default']
 colors = require('@material-ui/core/colors')
 
+
+
+# notistack
+notistack = require('notistack')
+
+SnackbarProvider = notistack.SnackbarProvider
+useSnackbar = notistack.useSnackbar
+
