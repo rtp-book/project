@@ -147,7 +147,7 @@ def ItemRows(props):
                   el(AddItem, None)
                  )
     else:
-        return el(TableRow, {'key': '0'})
+        return el(AddItem, None)
 
 
 def ItemsList(props):
