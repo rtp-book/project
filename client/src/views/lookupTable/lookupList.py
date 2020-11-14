@@ -94,7 +94,7 @@ def ItemRows(props):
         new_item = dict(editValues)
         if new_item['ID'] == "NEW":
             new_item.pop("ID")
-        # Transcrypt differs from CPython on object equality
+        # Transcrypt differs from CPython on object equality so check each value
         if len(new_item) != len(old_item) or \
                 len([key for key, val in new_item.items()
                      if val != old_item[key]]) > 0:
