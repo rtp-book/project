@@ -43,7 +43,8 @@ def LandingPageMenu(props):
                         'open': bool(mainMenu),
                         'onClose': mainMenuClose,
                        },
-                 el(MenuItem, {'onClick': lookupMenuOpen}, "Lookup  Tables"),
+                 el(MenuItem, {'onClick': lookupMenuOpen,
+                               'disabled': not isLoggedIn}, "Lookup  Tables"),
                  el(MenuItem, {'onClick': handleAbout}, "About"),
                  el(MenuItem, {'onClick': handleLogout,
                                'disabled': not isLoggedIn}, "Logout"),
@@ -59,7 +60,8 @@ def LandingPageMenu(props):
                  [el(MenuItem, {'key': table['name'],
                                 'onClick': handleLookup
                                }, table['name']) for table in lookup_tables
-                  ],
+                 ],
                 )
              )
+
 

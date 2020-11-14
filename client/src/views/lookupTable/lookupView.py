@@ -1,10 +1,9 @@
 from common.pyreact import Modal, useState, useEffect, createElement as el
 from common.pymui import Typography, AppBar, Toolbar, Box, Paper
-from common.pymui import IconButton, CloseIcon
+from common.pymui import IconButton, CloseIcon, useSnackbar
 from common.urlutils import fetch
 from main.appTheme import modalStyles
 from views.lookupTable.lookupList import ItemsList
-
 
 lookup_tables = [
     {'name': 'Categories', 'fields': ['Category'], 'sort': 'Category'},
@@ -26,6 +25,29 @@ def LookupTable(props):
     modalState = bool(table_name)
 
     items, setItems = useState([])
+
+    snack = useSnackbar()
+
+    def on_update_error():
+        snack.enqueueSnackbar("Error updating lookup table!", 
+                              {'variant': 'error'})
+        getItems()
+
+    def on_update_success():
+        snack.enqueueSnackbar("Lookup table updated!", {'variant': 'success'})
+        getItems()
+
+    def saveItem(item):
+        # If all non-ID values are empty, then delete record
+        if len(''.join([val for key, val in item.items() if key != 'ID'])) == 0:
+            if not item.get('ID', None):
+                getItems()  # Probably an unmodified record so just refresh list
+            else:
+                fetch(f"/api/lookup/{table_name}", on_update_success,
+                      method='DELETE', data=item, onError=on_update_error)
+        else:
+            fetch(f"/api/lookup/{table_name}", on_update_success,
+                  method='POST', data=item, onError=on_update_error)
 
     def getItems():
         def _getItems(data):
@@ -63,8 +85,9 @@ def LookupTable(props):
                 ),
               el(Paper, {'style': {'padding': '0.5rem', 'marginTop': '0.8rem'}},
                  el(ItemsList, {'items': items,
-                                'fields': table_fields}
-                   )
+                                'fields': table_fields,
+                                'saveItem': saveItem,
+                                'setItems': setItems})
                 )
              )
 
