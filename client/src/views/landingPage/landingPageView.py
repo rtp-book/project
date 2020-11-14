@@ -1,7 +1,8 @@
-from common.pyreact import useState, createElement as el, useEffect
+from common.pyreact import useState, createElement as el, useEffect, useContext
 from common.pymui import Container, Paper, Typography, useSnackbar
 from common.pymui import IconButton, MenuIcon, Link
 from common.urlutils import fetch
+from main import UserCtx
 from main.appTheme import Flexbox, FlexboxCenter
 from main.aboutModal import About
 from main.appData import appname
@@ -12,9 +13,10 @@ from views.lookupTable.lookupView import LookupTable
 
 def LandingPage(props):
     setBooksShow = props['setBooksShow']
-    login = props['login']
-    logout = props['logout']
-    isLoggedIn = props['isLoggedIn']
+
+    uCtx = useContext(UserCtx)
+    isLoggedIn = uCtx['isLoggedIn']
+    login = uCtx['login']
 
     mainMenu, setMainMenu = useState(None)
     aboutShow, setAboutShow = useState(False)
@@ -75,9 +77,7 @@ def LandingPage(props):
                                    'mainMenuClose': mainMenuClose,
                                    'setLookupModal':
                                        lambda tbl: setLookupModal(tbl),
-                                   'aboutModalOpen': aboutModalOpen,
-                                   'logout': logout,
-                                   'isLoggedIn': isLoggedIn}
+                                   'aboutModalOpen': aboutModalOpen}
                 ),
               el(Paper, {'style': {'padding': '0.5rem',
                                    'marginTop': '1rem'}

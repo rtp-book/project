@@ -1,5 +1,6 @@
-from common.pyreact import useState, createElement as el, Fragment
+from common.pyreact import useState, createElement as el, Fragment, useContext
 from common.pymui import Menu, MenuItem
+from main import UserCtx
 from views.lookupTable.lookupView import lookup_tables
 
 
@@ -8,8 +9,10 @@ def LandingPageMenu(props):
     mainMenuClose = props['mainMenuClose']
     setLookupModal = props['setLookupModal']
     aboutModalOpen = props['aboutModalOpen']
-    logout = props['logout']
-    isLoggedIn = props['isLoggedIn']
+
+    ctx = useContext(UserCtx)
+    logout = ctx['logout']
+    isLoggedIn = ctx['isLoggedIn']
 
     lookupMenu, setLookupMenu = useState(None)
 

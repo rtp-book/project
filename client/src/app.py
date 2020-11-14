@@ -3,6 +3,7 @@ from common.pyreact import useState, useEffect
 from common.pymui import ThemeProvider, SnackbarProvider
 from common.jsutils import setTitle, console
 from common.urlutils import fetch
+from main import UserCtx
 from main.appTheme import theme
 from main.appData import gaid
 from views.bookList.bookListView import BookList
@@ -54,19 +55,25 @@ def App(props):
 
         fetch('/api/ping', validated, onError=notValidated, redirect=False)
 
+
     useEffect(validateSession, [])
+
+    user_ctx = {'user': user,
+                'login': login,
+                'logout': logout,
+                'isLoggedIn': isLoggedIn
+               }
 
     return el(ThemeProvider, {'theme': theme},
               el(SnackbarProvider, {'maxSnack': 3},
-                 el(router[pathname], {'setBooksShow': setBooksShow,
-                                       'login': login,
-                                       'logout': logout,
-                                       'isLoggedIn': isLoggedIn
-                                      }
+                 el(UserCtx.Provider, {'value': user_ctx},
+                    el(router[pathname], {'setBooksShow': setBooksShow}
+                      )
                    )
                 )
              )
 
 
 render(App, {'title': "Books"}, 'root')
+
 
