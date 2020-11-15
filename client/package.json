@@ -1,6 +1,6 @@
 {
   "name": "bookapp",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "React to Python",
   "main": "index.js",
   "scripts": {
