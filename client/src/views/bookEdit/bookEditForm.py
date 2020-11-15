@@ -3,7 +3,8 @@ from common.pymui import TextField, RadioGroup, FormControlLabel, Radio, Button
 from common.pymui import Paper, Divider, Typography
 from main import UserCtx
 from main.appTheme import Flexbox
-from views.bookEdit.bookEditLookups import CategoriesList, PublishersList, FormatsList, ConditionsList
+from views.bookEdit.bookEditLookups import CategoriesList, PublishersList
+from views.bookEdit.bookEditLookups import  FormatsList, ConditionsList
 
 
 def BookEditForm(props):
