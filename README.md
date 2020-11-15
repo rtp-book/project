@@ -19,3 +19,5 @@ The [main branch](https://github.com/rtp-book/project) of the project code has t
 - [Step 14](https://github.com/rtp-book/project/tree/step14) - Deploying the Application
 
 **requirements.txt** and **package.json** files are included as part of the source code for installing Python and JavaScript dependecies in your development environment.
+
+Source code for Part 1 and Part 2 of the book is in the [Chapter Code Repository](https://github.com/rtp-book/code)
