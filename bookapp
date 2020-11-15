@@ -1,0 +1,18 @@
+server {
+    listen 80;
+    root /home/data/bookapp/client/dist/prod/;
+    index index.html;
+
+    location /api {
+        proxy_pass http://localhost:8000;
+        include proxy_params;
+    }
+
+    location / {
+        try_files $uri /index.html;
+    }
+
+    error_log  /var/log/nginx/api-error.log;
+    access_log /var/log/nginx/api-access.log;
+}
+

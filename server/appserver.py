@@ -14,9 +14,11 @@ logging.basicConfig(format=fmt)
 log = logging.getLogger()
 log.setLevel(logging.INFO)
 
+SERVE_SPA = True
+SPA_DIR = '../client/dist/prod'
 SESSION_TIMEOUT = 60
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder=SPA_DIR, static_url_path='/')
 app.register_blueprint(admin_api)
 app.register_blueprint(db_api)
 
@@ -48,7 +50,10 @@ def unauthorized_callback():
 
 @app.errorhandler(404)
 def request_not_found(err):
-    return jsonify({'error': str(err)})
+   if SERVE_SPA:
+       return app.send_static_file('index.html')
+   else:
+       return jsonify({'error': str(err)})
 
 
 @app.before_request
@@ -69,7 +74,7 @@ def apply_headers(response):
     return response
 
 
-@app.route('/', methods=['GET'])
+@app.route('/api/', methods=['GET'])
 def index():
     return Response("OK", 200)
 
