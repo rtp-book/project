@@ -1,7 +1,7 @@
 from common.pyreact import useState, createElement as el, useEffect, useContext
 from common.pymui import Container, Paper, Typography, useSnackbar
-from common.pymui import IconButton, MenuIcon, Link
-from common.urlutils import fetch
+from common.pymui import IconButton, MenuIcon
+from common.urlutils import fetch, Link, buildParams, spaRedirect
 from main import UserCtx
 from main.appTheme import Flexbox, FlexboxCenter
 from main.aboutModal import About
@@ -12,7 +12,10 @@ from views.lookupTable.lookupView import LookupTable
 
 
 def LandingPage(props):
-    setBooksShow = props['setBooksShow']
+    params = dict(props['params'])
+    pathname = props['pathname']
+
+    show_login = params.get('login', 'hide') == 'show'
 
     uCtx = useContext(UserCtx)
     isLoggedIn = uCtx['isLoggedIn']
@@ -31,18 +34,20 @@ def LandingPage(props):
         def _login():
             login(username)
             snack.enqueueSnackbar("Login succeeded!", {'variant': 'success'})
+            spaRedirect(redir)
 
         def _loginFailed():
             setLoginModal(True)
             snack.enqueueSnackbar("Login failed, please try again",
                                   {'variant': 'error'}
-                                 )
+                                  )
 
+        redir = params.get('redir', f"{pathname}{buildParams(params)}")
         fetch("/api/login", _login,
               data={'username': username, 'password': password},
               method='POST',
               onError=_loginFailed
-             )
+              )
 
         setLoginModal(False)
 
@@ -60,6 +65,7 @@ def LandingPage(props):
     def aboutModalOpen():
         setAboutShow(True)
 
+    useEffect(lambda: setLoginModal(show_login), [show_login])
     useEffect(clearUser, [loginModal])
 
     return el(Container, {'maxWidth': 'md'},
@@ -84,15 +90,12 @@ def LandingPage(props):
                         },
                  el(FlexboxCenter, None,
                     el(Typography, {'variant': 'h5'},
-                       el(Link, {'href': '#',
-                                 'variant': 'h5',
-                                 'onClick': lambda: setBooksShow(True)
-                                }, "Books")
+                       el(Link, {'to': '/books'}, "Books")
                       ),
                    ),
                  el(FlexboxCenter, None,
                     el(Typography, {'variant': 'h5'},
-                       el(Link, {'href': '#',
+                       el(Link, {'to': '#',
                                  'onClick': lambda: setLoginModal(True)
                                 }, "Login")
                       ) if not isLoggedIn else None

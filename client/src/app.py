@@ -2,7 +2,7 @@ from common.pyreact import render, createElement as el, ReactGA
 from common.pyreact import useState, useEffect
 from common.pymui import ThemeProvider, SnackbarProvider
 from common.jsutils import setTitle, console
-from common.urlutils import fetch
+from common.urlutils import fetch, spaRedirect
 from main import UserCtx
 from main.appTheme import theme
 from main.appData import gaid
@@ -16,19 +16,19 @@ ReactGA.initialize(gaid, {'titleCase': False, 'debug': False,
 
 
 def App(props):
+    title = props['title']
+    pathname = props['pathname']
+
     user, setUser = useState("")
 
-    setTitle(props['title'])
-
-    booksShow, setBooksShow = useState(False)
-
-    pathname = '/books' if booksShow else '/'
+    setTitle(title)
 
     router = {
         '/': LandingPage,
         '/books': BookList,
     }
 
+    route_is_valid = pathname in router
     isLoggedIn = len(user) > 0
 
     def login(username):
@@ -36,7 +36,7 @@ def App(props):
 
     def logout():
         setUser("")
-        fetch('/api/logout')
+        fetch('/api/logout', lambda: spaRedirect('/'))
 
     def validateSession():
         def validated():
@@ -47,33 +47,40 @@ def App(props):
                 fetch('/api/whoami', _setuser,
                       onError=console.error,
                       redirect=False
-                     )
+                      )
 
         def notValidated(error):
             if len(user) > 0:
                 setUser("")
 
-        fetch('/api/ping', validated, onError=notValidated, redirect=False)
-
-
-    useEffect(validateSession, [])
+        if route_is_valid:
+            fetch('/api/ping', validated, onError=notValidated, redirect=False)
 
     user_ctx = {'user': user,
                 'login': login,
                 'logout': logout,
                 'isLoggedIn': isLoggedIn
-               }
+                }
 
-    return el(ThemeProvider, {'theme': theme},
-              el(SnackbarProvider, {'maxSnack': 3},
-                 el(UserCtx.Provider, {'value': user_ctx},
-                    el(router[pathname], {'setBooksShow': setBooksShow}
-                      )
-                   )
-                )
-             )
+    useEffect(validateSession, [])
+    useEffect(lambda: ReactGA.pageview(pathname), [pathname])
+
+    if route_is_valid:
+        return el(ThemeProvider, {'theme': theme},
+                  el(SnackbarProvider, {'maxSnack': 3},
+                     el(UserCtx.Provider, {'value': user_ctx},
+                        el(router[pathname], props)
+                       )
+                    )
+                 )
+    else:
+        console.error(f"ERROR - Bad pathname for route: {props['pathname']}")
+        return el('div', None,
+                  el('h1', None, "Page Not Found"),
+                  el('p', None, f"Bad pathname: {props['pathname']}"),
+                  el('div', None, el('a', {'href': "/"}, "Back to Home"))
+                 )
 
 
 render(App, {'title': "Books"}, 'root')
-
 

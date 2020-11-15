@@ -2,7 +2,7 @@ from common.pyreact import useState, useEffect, createElement as el, useContext
 from common.pymui import Typography, AppBar, Toolbar, Tooltip, useSnackbar
 from common.pymui import Container, Box, Paper, CircularProgress
 from common.pymui import IconButton, CloseIcon, AddIcon
-from common.urlutils import fetch
+from common.urlutils import fetch, spaRedirect, buildParams
 from main import UserCtx
 from views.bookEdit.bookEditView import BookEdit
 from views.bookList.bookListFilter import BooksFilterVu
@@ -10,7 +10,9 @@ from views.bookList.bookListTable import BooksTable
 
 
 def BookList(props):
-    setBooksShow = props['setBooksShow']
+    params = props['params']
+
+    book_id = params['id']
 
     books, setBooks = useState([])
     sortKey, setSortKey = useState('Title')
@@ -28,7 +30,11 @@ def BookList(props):
 
     snack = useSnackbar()
 
-    def setEdit(book_id):
+    def handleAdd():
+        new_params = buildParams({'id': "NEW"})
+        spaRedirect(f'/books{new_params}')
+
+    def setEdit():
         if book_id:
             setBookModal(book_id)
         else:
@@ -42,7 +48,7 @@ def BookList(props):
     def on_fetch_error():
         snack.enqueueSnackbar("Error retrieving data!",
                               {'variant': 'error'}
-                             )
+                              )
         setShowProgress(False)
 
     def getBooks():
@@ -64,7 +70,7 @@ def BookList(props):
         fetch("/api/books", _getBooks,
               params=filterParams,
               onError=on_fetch_error
-             )
+              )
         return abort
 
     def getLookup(table_name, setState):
@@ -89,10 +95,10 @@ def BookList(props):
         getLookup('Formats', setFormats)
         getLookup('Conditions', setConditions)
 
-    useEffect(getLookups, [])
     useEffect(getBooks, [filterParams])
     useEffect(sortBooks, [sortKey])
-
+    useEffect(setEdit, [book_id])
+    useEffect(getLookups, [])
 
     return el(Container, None,
               el(AppBar, {'position': 'static',
@@ -103,7 +109,7 @@ def BookList(props):
                        el(IconButton, {'edge': 'start',
                                        'color': 'inherit',
                                        'padding': 'none',
-                                       'onClick': lambda: setEdit("NEW")
+                                       'onClick': handleAdd
                                       }, el(AddIcon, None)
                          )
                       ) if isLoggedIn else None,
@@ -112,7 +118,7 @@ def BookList(props):
                       ),
                     el(IconButton, {'edge': 'end',
                                     'color': 'inherit',
-                                    'onClick': lambda: setBooksShow(False)
+                                    'onClick': lambda: spaRedirect('/')
                                    }, el(CloseIcon, None)
                       ),
                    ),
@@ -121,18 +127,14 @@ def BookList(props):
                                  'setFilterParams': setFilterParams}
                 ),
               el(Paper, {'style': {'padding': '0.5rem', 'marginTop': '0.8rem'}},
-                 el(BooksTable, {'books': books,
-                                 'setSortKey': setSortKey,
-                                 'setEdit': setEdit}
-                   )
+                 el(BooksTable, {'books': books, 'setSortKey': setSortKey})
                 ),
               el(BookEdit, {'bookId': bookModal,
                             'categories': categories,
                             'publishers': publishers,
                             'formats': formats,
                             'conditions': conditions,
-                            'getBooks': getBooks,
-                            'onClose': lambda: setBookModal(None)
+                            'getBooks': getBooks
                            }),
               el(CircularProgress,
                  {'style': {'position': 'absolute',
@@ -141,5 +143,4 @@ def BookList(props):
                             'marginLeft': -12}
                  }) if showProgress else None
              )
-
 

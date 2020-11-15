@@ -2,7 +2,7 @@ from common.jsutils import confirm
 from common.pyreact import useState, useEffect, createElement as el, Modal
 from common.pymui import Typography, AppBar, Toolbar, Box, useSnackbar
 from common.pymui import IconButton, CloseIcon
-from common.urlutils import fetch
+from common.urlutils import fetch, spaRedirect
 from main.appTheme import modalStyles
 from views.bookEdit.bookEditForm import BookEditForm
 
@@ -33,7 +33,6 @@ def BookEdit(props):
     formats = props['formats']
     conditions = props['conditions']
     getBooks = props['getBooks']
-    onClose = props['onClose']
 
     book, setBook = useState(book_template)
     bookInitial, setBookInitial = useState(book_template)
@@ -74,7 +73,7 @@ def BookEdit(props):
     def on_update_success():
         getBooks()
         snack.enqueueSnackbar("Book was updated!", {'variant': 'success'})
-        onClose()
+        spaRedirect('/books')
 
     def on_update_error():
         snack.enqueueSnackbar("Error updating data!", {'variant': 'error'})
@@ -121,7 +120,7 @@ def BookEdit(props):
                       ),
                     el(IconButton, {'edge': 'end',
                                     'color': 'inherit',
-                                    'onClick': onClose
+                                    'onClick': lambda: spaRedirect('/books')
                                    }, el(CloseIcon, None)
                       ),
                    ),

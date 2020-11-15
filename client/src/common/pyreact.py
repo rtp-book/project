@@ -1,5 +1,5 @@
 # __pragma__ ('skip')
-from common import require, document
+from common import require, document, window, __new__
 # __pragma__ ('noskip')
 
 
@@ -22,10 +22,16 @@ Fragment = React.Fragment
 
 def render(root_component, props, container):
     def main():
+        querystring = window.location.search
+        params = __new__(window.URLSearchParams(querystring)).entries()
+        new_props = {'pathname': window.location.pathname,
+                     'params': {p[0]: p[1] for p in params if p}}
+        new_props.update(props)
         ReactDOM.render(
-            React.createElement(root_component, props),
+            React.createElement(root_component, new_props),
             document.getElementById(container)
         )
 
     document.addEventListener("DOMContentLoaded", main)
+    window.addEventListener('popstate', main)
 

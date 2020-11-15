@@ -1,11 +1,12 @@
 from common.pyreact import createElement as el
+from common.urlutils import buildParams, spaRedirect
 from common.pymui import Box, Link, Tooltip
-from common.pymui import TableContainer, Table, TableHead, TableBody, TableRow, TableCell
+from common.pymui import TableContainer, Table
+from common.pymui import TableHead, TableBody, TableRow, TableCell
 
 
 def BookRowVu(props):
     book = props['book']
-    setEdit = props['setEdit']
 
     book_id = book['ID']
     title = book['Title']
@@ -16,7 +17,8 @@ def BookRowVu(props):
     location = book['Location']
 
     def handleEdit():
-        setEdit(book_id)
+        params = buildParams({'id': book_id})
+        spaRedirect(f'/books{params}')
 
     return el(TableRow, {'onClick': handleEdit},
               el(TableCell, None,
@@ -43,13 +45,9 @@ def BookRowVu(props):
 def BooksTable(props):
     books = props['books']
     setSortKey = props['setSortKey']
-    setEdit = props['setEdit']
 
     def bookToRow(book):
-        return el(BookRowVu, {'key': book['ID'],
-                              'book': book,
-                              'setEdit': setEdit}
-                 )
+        return el(BookRowVu, {'key': book['ID'], 'book': book})
 
     def BookRows():
         if len(books) > 0:
