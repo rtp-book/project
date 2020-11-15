@@ -1,20 +1,8 @@
 from common.pyreact import useState, createElement as el
 from common.pymui import TextField, Button, Paper
 from main.appTheme import Flexbox
+from views.bookEdit.bookEditLookups import CategoriesList
 
-
-def CategoriesList(props):
-    categories = props['categories']
-
-    def categoryToRow(author):
-        category_id = author['ID']
-        category_name = author['Category']
-
-        return el('option', {'key': category_id, 
-                             'value': category_name
-                            }, category_name)
-
-    return [categoryToRow(category) for category in categories]
 
 
 def BooksFilterVu(props):

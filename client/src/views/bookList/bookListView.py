@@ -1,7 +1,10 @@
-from common.pyreact import useState, useEffect, createElement as el
-from common.pymui import Typography, AppBar, Toolbar, IconButton, CloseIcon
+from common.pyreact import useState, useEffect, createElement as el, useContext
+from common.pymui import Typography, AppBar, Toolbar, Tooltip, useSnackbar
 from common.pymui import Container, Box, Paper, CircularProgress
+from common.pymui import IconButton, CloseIcon, AddIcon
 from common.urlutils import fetch
+from main import UserCtx
+from views.bookEdit.bookEditView import BookEdit
 from views.bookList.bookListFilter import BooksFilterVu
 from views.bookList.bookListTable import BooksTable
 
@@ -13,11 +16,23 @@ def BookList(props):
     sortKey, setSortKey = useState('Title')
     showProgress, setShowProgress = useState(False)
     filterParams, setFilterParams = useState({})
+    bookModal, setBookModal = useState(None)
 
     categories, setCategories = useState([])
     publishers, setPublishers = useState([])
     formats, setFormats = useState([])
     conditions, setConditions = useState([])
+
+    ctx = useContext(UserCtx)
+    isLoggedIn = ctx['isLoggedIn']
+
+    snack = useSnackbar()
+
+    def setEdit(book_id):
+        if book_id:
+            setBookModal(book_id)
+        else:
+            setBookModal(None)
 
     def sortBooks():
         book_list = [dict(tmp_book) for tmp_book in books]
@@ -25,6 +40,9 @@ def BookList(props):
             setBooks(sorted(book_list, key=lambda k: k[sortKey] or ""))
 
     def on_fetch_error():
+        snack.enqueueSnackbar("Error retrieving data!",
+                              {'variant': 'error'}
+                             )
         setShowProgress(False)
 
     def getBooks():
@@ -81,6 +99,14 @@ def BookList(props):
                           'style': {'marginBottom': '0.5rem'}
                          },
                  el(Toolbar, {'variant': 'dense'},
+                    el(Tooltip, {'title': 'Add new book'},
+                       el(IconButton, {'edge': 'start',
+                                       'color': 'inherit',
+                                       'padding': 'none',
+                                       'onClick': lambda: setEdit("NEW")
+                                      }, el(AddIcon, None)
+                         )
+                      ) if isLoggedIn else None,
                     el(Box, {'width': '100%'},
                        el(Typography, {'variant': 'h6'}, "Books")
                       ),
@@ -95,8 +121,19 @@ def BookList(props):
                                  'setFilterParams': setFilterParams}
                 ),
               el(Paper, {'style': {'padding': '0.5rem', 'marginTop': '0.8rem'}},
-                 el(BooksTable, {'books': books, 'setSortKey': setSortKey})
+                 el(BooksTable, {'books': books,
+                                 'setSortKey': setSortKey,
+                                 'setEdit': setEdit}
+                   )
                 ),
+              el(BookEdit, {'bookId': bookModal,
+                            'categories': categories,
+                            'publishers': publishers,
+                            'formats': formats,
+                            'conditions': conditions,
+                            'getBooks': getBooks,
+                            'onClose': lambda: setBookModal(None)
+                           }),
               el(CircularProgress,
                  {'style': {'position': 'absolute',
                             'top': '30%',
@@ -104,4 +141,5 @@ def BookList(props):
                             'marginLeft': -12}
                  }) if showProgress else None
              )
+
 

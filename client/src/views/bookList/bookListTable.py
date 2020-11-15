@@ -1,12 +1,13 @@
 from common.pyreact import createElement as el
 from common.pymui import Box, Link, Tooltip
-from common.pymui import TableContainer, Table
-from common.pymui import TableHead, TableBody, TableRow, TableCell
+from common.pymui import TableContainer, Table, TableHead, TableBody, TableRow, TableCell
 
 
 def BookRowVu(props):
     book = props['book']
+    setEdit = props['setEdit']
 
+    book_id = book['ID']
     title = book['Title']
     author = book['Author']
     book_type = "Fiction" if book['IsFiction'] else "Non-Fiction"
@@ -14,7 +15,10 @@ def BookRowVu(props):
     book_fmt = book['Format']
     location = book['Location']
 
-    return el(TableRow, None,
+    def handleEdit():
+        setEdit(book_id)
+
+    return el(TableRow, {'onClick': handleEdit},
               el(TableCell, None,
                  el(Tooltip, {'title': title if title else ''},
                     el(Box, {'width': '10rem',
@@ -39,9 +43,13 @@ def BookRowVu(props):
 def BooksTable(props):
     books = props['books']
     setSortKey = props['setSortKey']
+    setEdit = props['setEdit']
 
     def bookToRow(book):
-        return el(BookRowVu, {'key': book['ID'], 'book': book})
+        return el(BookRowVu, {'key': book['ID'],
+                              'book': book,
+                              'setEdit': setEdit}
+                 )
 
     def BookRows():
         if len(books) > 0:
