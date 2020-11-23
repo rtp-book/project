@@ -10,7 +10,7 @@ def App():
 
     def handleChange(event):
         target = event['target']
-        setPhrase(target.value)
+        setPhrase(target['value'])
 
     return el('div', None,
               el('label', {'htmlFor': 'testPhrase'}, "Test Phrase: "),
