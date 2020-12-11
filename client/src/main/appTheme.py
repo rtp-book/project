@@ -16,18 +16,18 @@ theme = createMuiTheme({
         },
     },
     'palette': {
-        'primary': colors.teal,
-        'secondary': colors.pink,
+        'primary': colors['teal'],
+        'secondary': colors['pink'],
         'altPrimary': {
-            'main': colors.cyan[700],
-            'contrastText': colors.common.white,
+            'main': colors['cyan'][700],
+            'contrastText': colors['common']['white'],
         },
         'altSecondary': {
-            'main': colors.cyan[400],
-            'contrastText': colors.common.white,
+            'main': colors['cyan'][400],
+            'contrastText': colors['common']['white'],
         },
-        'warning': colors.yellow,
-        'error': colors.red,
+        'warning': colors['yellow'],
+        'error': colors['red'],
     },
     'props': {
         'MuiButton': {
