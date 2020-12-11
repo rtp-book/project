@@ -10,7 +10,6 @@ ReactGA = require('react-ga')
 
 Modal = require('react-modal')
 
-
 # Map React javaScript objects to Python identifiers
 createElement = React.createElement
 useState = React.useState
