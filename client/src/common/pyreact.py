@@ -8,7 +8,8 @@ React = require('react')
 ReactDOM = require('react-dom')
 ReactGA = require('react-ga')
 
-Modal = require('react-modal/lib/components/Modal')['default']
+Modal = require('react-modal')
+
 
 # Map React javaScript objects to Python identifiers
 createElement = React.createElement
