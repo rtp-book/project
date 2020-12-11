@@ -28,11 +28,11 @@ def BookList(props):
         setShowProgress(False)
 
     def getBooks():
-        getBooks.isPending = True
+        isPending = True
 
         def _getBooks(data):
             book_list = data if data else []
-            if getBooks.isPending:
+            if isPending:
                 if len(book_list) > 0:
                     setBooks(sorted(book_list, key=lambda k: k[sortKey]))
                 else:
@@ -40,7 +40,8 @@ def BookList(props):
                 setShowProgress(False)
 
         def abort():
-            getBooks.isPending = False
+            nonlocal isPending
+            isPending = False
 
         setShowProgress(True)
         fetch("/api/books", _getBooks,
@@ -50,17 +51,18 @@ def BookList(props):
         return abort
 
     def getLookup(table_name, setState):
-        getLookup.isPending = True
+        isPending = True
 
         def _getLookup(data):
-            if getLookup.isPending:
+            if isPending:
                 if data:
                     setState(data)
                 else:
                     setState([])
 
         def abort():
-            getLookup.isPending = False
+            nonlocal isPending
+            isPending = False
 
         fetch(f"/api/lookup/{table_name}", _getLookup)
         return abort
