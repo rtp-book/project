@@ -17,7 +17,7 @@ async def fetch(url, callback=None, **kwargs):
     t_start = time.time()
     on_error = kwargs.pop('onError', None)
     redirect = kwargs.pop('redirect', True)
-    method = kwargs.pop('method', 'get')
+    method = kwargs.pop('method', 'GET')
     try:
         if method == 'POST' or method == 'DELETE':
             data = kwargs.pop('data', None)
