@@ -15,7 +15,7 @@ async def fetch(url, callback=None, **kwargs):
     ReactGA.event({'category': 'api', 'action': 'request', 'label': url})
     t_start = time.time()
     on_error = kwargs.pop('onError', None)
-    method = kwargs.pop('method', 'get')
+    method = kwargs.pop('method', 'GET')
     try:
         if method == 'POST' or method == 'DELETE':
             data = kwargs.pop('data', None)
