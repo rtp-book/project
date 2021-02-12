@@ -50,10 +50,10 @@ def unauthorized_callback():
 
 @app.errorhandler(404)
 def request_not_found(err):
-   if SERVE_SPA:
-       return app.send_static_file('index.html')
-   else:
-       return jsonify({'error': str(err)})
+    if SERVE_SPA:
+        return app.send_static_file('index.html')
+    else:
+        return jsonify({'error': str(err)})
 
 
 @app.before_request
