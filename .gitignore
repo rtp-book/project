@@ -1,8 +1,6 @@
 .idea/
 
 *.pyc
-*.swp
-*.dat
 *.bak
 *.log
 
