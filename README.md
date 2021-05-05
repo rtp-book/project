@@ -1,6 +1,8 @@
 ## React to Python
 ### Part III Project Code
 
+This repository contains source code files for React to Python Part 3
+
 The [main branch](https://github.com/rtp-book/project) of the project code has the finished project.  Other branches have versions of the code that reflect the progress in each chapter of the book as follows:
 
 - [Step 1](https://github.com/rtp-book/project/tree/step01) - Environment Setup
@@ -21,3 +23,5 @@ The [main branch](https://github.com/rtp-book/project) of the project code has t
 **requirements.txt** and **package.json** files are included as part of the source code for installing Python and JavaScript dependecies in your development environment.
 
 Source code for Part 1 and Part 2 of the book is in the [Chapter Code Repository](https://github.com/rtp-book/code)
+
+For information on the *React to Python* book itself, visit [https://pyreact.com](https://pyreact.com)
