@@ -1,9 +1,10 @@
-from common.pyreact import useState, createElement as el, Fragment
+from common.pyreact import useState, react_component, Fragment, Input
 from common.pymui import Box, AddIcon, IconButton
-from common.pymui import TableContainer, Table 
+from common.pymui import TableContainer, Table
 from common.pymui import TableHead, TableBody, TableRow, TableCell
 
 
+@react_component
 def ItemEditCell(props):
     field = props['field']
     setEditValues = props['setEditValues']
@@ -27,24 +28,26 @@ def ItemEditCell(props):
         if key == 'Enter':
             checkSaveItem()
 
-    return el(TableCell, None,
-              el('input', {'id': field,
-                           'onKeyPress': handleKeyPress,
-                           'onChange': handleChange,
-                           'value': field_value,
-                           'style': {'width': '10rem', 'margin': '-4px'}}
-                )
-             )
+    return TableCell(None,
+                     Input({'id': field,
+                            'onKeyPress': handleKeyPress,
+                            'onChange': handleChange,
+                            'value': field_value,
+                            'style': {'width': '10rem', 'margin': '-4px'}}
+                           )
+                     )
 
 
+@react_component
 def ItemCell(props):
     value = props['value']
 
-    return el(TableCell, None,
-              el(Box, {'width': '10rem', 'whiteSpace': 'nowrap'}, value)
-             )
+    return TableCell(None,
+                     Box({'width': '10rem', 'whiteSpace': 'nowrap'}, value)
+                     )
 
 
+@react_component
 def ItemRowVu(props):
     item = props['item']
     fields = props['fields']
@@ -63,23 +66,24 @@ def ItemRowVu(props):
         setSelected(item['ID'])
 
     if item['ID'] == selected:
-        return el(TableRow, None,
-                  [el(ItemEditCell, {'key': field,
-                                     'field': field,
-                                     'setEditValues': setEditValues,
-                                     'editValues': editValues,
-                                     'checkSaveItem': checkSaveItem,
-                                    }) for field in fields]
-                 )
+        return TableRow(None,
+                        [ItemEditCell({'key': field,
+                                       'field': field,
+                                       'setEditValues': setEditValues,
+                                       'editValues': editValues,
+                                       'checkSaveItem': checkSaveItem,
+                                       }) for field in fields]
+                        )
     else:
-        return el(TableRow, {'onClick': handleClick,
-                             'onDoubleClick': handleDoubleClick},
-                  [el(ItemCell, {'key': field,
-                                 'value': item[field],
-                                }) for field in fields]
-                 )
+        return TableRow({'onClick': handleClick,
+                         'onDoubleClick': handleDoubleClick},
+                        [ItemCell({'key': field,
+                                   'value': item[field],
+                                   }) for field in fields]
+                        )
 
 
+@react_component
 def ItemRows(props):
     items = props['items']
     fields = props['fields']
@@ -112,67 +116,69 @@ def ItemRows(props):
         setSelected("NEW")
 
     def itemToRow(item):
-        return el(ItemRowVu, {'key': item['ID'],
-                              'item': item,
-                              'fields': fields,
-                              'selected': selected,
-                              'setSelected': setSelected,
-                              'editValues': editValues,
-                              'setEditValues': setEditValues,
-                              'checkSaveItem': checkSaveItem,
-                             }
-                 )
+        return ItemRowVu({'key': item['ID'],
+                          'item': item,
+                          'fields': fields,
+                          'selected': selected,
+                          'setSelected': setSelected,
+                          'editValues': editValues,
+                          'setEditValues': setEditValues,
+                          'checkSaveItem': checkSaveItem,
+                          }
+                         )
 
+    @react_component
     def AddItem():
         if selected == "NEW":
             return None
         else:
-            return el(TableRow, {'key': 'ADD'},
-                      el(TableCell, {'variant': 'footer',
-                                     'align': 'center',
-                                     'colSpan': len(fields)},
-                         el(IconButton, {'edge': 'end',
-                                         'color': 'primary',
-                                         'size': 'small',
-                                         'padding': 'none',
-                                         'onClick': handleAdd
-                                        }, el(AddIcon, None)
-                           )
-                        )
-                     )
+            return TableRow({'key': 'ADD'},
+                            TableCell({'variant': 'footer',
+                                       'align': 'center',
+                                       'colSpan': len(fields)},
+                                      IconButton({'edge': 'end',
+                                                  'color': 'primary',
+                                                  'size': 'small',
+                                                  'padding': 'none',
+                                                  'onClick': handleAdd
+                                                  }, AddIcon(None)
+                                                 )
+                                      )
+                            )
 
     if len(items) > 0:
-        return el(Fragment, None,
-                  [itemToRow(item) for item in items if item],
-                  el(AddItem, None)
-                 )
+        return Fragment(None,
+                        [itemToRow(item) for item in items if item],
+                        AddItem(None)
+                        )
     else:
-        return el(AddItem, None)
+        return AddItem(None)
 
 
+@react_component
 def ItemsList(props):
     items = props['items']
     fields = props['fields']
     saveItem = props['saveItem']
     setItems = props['setItems']
 
+    @react_component
     def HeaderCols():
-        return el(TableRow, None,
-                  [el(TableCell, {'key': field, 'fields': fields}, field)
-                   for field in fields]
-                 )
+        return TableRow(None,
+                        [TableCell({'key': field, 'fields': fields}, field)
+                         for field in fields]
+                        )
 
-    return el(TableContainer, {'style': {'maxHeight': '10.5rem'}},
-              el(Table, {'size': 'small', 'stickyHeader': True},
-                 el(TableHead, None,
-                    el(HeaderCols, None),
-                   ),
-                 el(TableBody, None,
-                    el(ItemRows, {'items': items,
-                                  'fields': fields,
-                                  'setItems': setItems,
-                                  'saveItem': saveItem}),
-                   )
-                )
-             )
-
+    return TableContainer({'style': {'maxHeight': '10.5rem'}},
+                          Table({'size': 'small', 'stickyHeader': True},
+                                TableHead(None,
+                                          HeaderCols(None),
+                                          ),
+                                TableBody(None,
+                                          ItemRows({'items': items,
+                                                    'fields': fields,
+                                                    'setItems': setItems,
+                                                    'saveItem': saveItem}),
+                                          )
+                                )
+                          )

@@ -1,6 +1,6 @@
-from common.pyreact import createElement
+from common.pyreact import react_component
 from common.pymui import createMuiTheme, colors
-from common.pymui import Box, styled, TextField
+from common.pymui import muiBox, styled, TextField
 
 theme = createMuiTheme({
     'overrides': {
@@ -57,21 +57,26 @@ theme = createMuiTheme({
 })
 
 
+@react_component
 def ROTextField(props):
     new_props = {'type': 'text', 'fullWidth': True, 'disabled': True}
     new_props.update(props)
-    return createElement(TextField, new_props)
+    return TextField(new_props)
 
 
-Flexbox = styled(Box)({
-    'display': 'flex',
-})
+Flexbox = react_component(
+    styled(muiBox)({
+        'display': 'flex',
+    })
+)
 
-FlexboxCenter = styled(Box)({
-    'display': 'flex',
-    'alignItems': 'center',
-    'justifyContent': 'center'
-})
+FlexboxCenter = react_component(
+    styled(muiBox)({
+        'display': 'flex',
+        'alignItems': 'center',
+        'justifyContent': 'center'
+    })
+)
 
 modalStyles = {
     'overlay': {'zIndex': 1000},
@@ -84,5 +89,3 @@ modalStyles = {
         'transform': 'translate(-50%, -50%)'
     }
 }
-
-

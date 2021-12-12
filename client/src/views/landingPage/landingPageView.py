@@ -1,4 +1,4 @@
-from common.pyreact import useState, createElement as el, useEffect, useContext
+from common.pyreact import useState, useEffect, useContext, react_component
 from common.pymui import Container, Paper, Typography, useSnackbar
 from common.pymui import IconButton, MenuIcon
 from common.urlutils import fetch, Link, buildParams, spaRedirect
@@ -11,6 +11,7 @@ from views.landingPage.landingPageMenu import LandingPageMenu
 from views.lookupTable.lookupView import LookupTable
 
 
+@react_component
 def LandingPage(props):
     params = dict(props['params'])
     pathname = props['pathname']
@@ -68,40 +69,40 @@ def LandingPage(props):
     useEffect(lambda: setLoginModal(show_login), [show_login])
     useEffect(clearUser, [loginModal])
 
-    return el(Container, {'maxWidth': 'md'},
-              el(Paper, {'style': {'padding': '1rem'}},
-                 el(Flexbox, {'alignItems': 'center'},
-                    el(IconButton, {'edge': 'start',
+    return Container({'maxWidth': 'md'},
+              Paper({'style': {'padding': '1rem'}},
+                 Flexbox({'alignItems': 'center'},
+                    IconButton({'edge': 'start',
                                     'color': 'inherit',
                                     'onClick': mainMenuOpen
-                                   }, el(MenuIcon, None)
+                                   }, MenuIcon(None)
                       ),
-                    el(Typography, {'variant': 'h5'}, appname)
+                    Typography({'variant': 'h5'}, appname)
                    )
                 ),
-              el(LandingPageMenu, {'mainMenu': mainMenu,
+              LandingPageMenu({'mainMenu': mainMenu,
                                    'mainMenuClose': mainMenuClose,
                                    'setLookupModal':
                                        lambda tbl: setLookupModal(tbl),
                                    'aboutModalOpen': aboutModalOpen}
                 ),
-              el(Paper, {'style': {'padding': '0.5rem',
+              Paper({'style': {'padding': '0.5rem',
                                    'marginTop': '1rem'}
                         },
-                 el(FlexboxCenter, None,
-                    el(Typography, {'variant': 'h5'},
-                       el(Link, {'to': '/books'}, "Books")
+                 FlexboxCenter(None,
+                    Typography({'variant': 'h5'},
+                       Link({'to': '/books'}, "Books")
                       ),
                    ),
-                 el(FlexboxCenter, None,
-                    el(Typography, {'variant': 'h5'},
-                       el(Link, {'to': '#',
+                 FlexboxCenter(None,
+                    Typography({'variant': 'h5'},
+                       Link({'to': '#',
                                  'onClick': lambda: setLoginModal(True)
                                 }, "Login")
                       ) if not isLoggedIn else None
                    ),
                 ),
-              el(Login, {'onClose': lambda: setLoginModal(False),
+              Login({'onClose': lambda: setLoginModal(False),
                          'onLogin': doLogin,
                          'password': password,
                          'username': username,
@@ -110,10 +111,10 @@ def LandingPage(props):
                          'modalState': loginModal,
                         }
                 ),
-              el(About, {'onClose': lambda: setAboutShow(False),
+              About({'onClose': lambda: setAboutShow(False),
                          'modalState': aboutShow}
                 ),
-              el(LookupTable, {'table': lookupModal,
+              LookupTable({'table': lookupModal,
                                'onClose': lambda: setLookupModal(None)}
                 ) if lookupModal else None
              )

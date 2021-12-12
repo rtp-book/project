@@ -1,4 +1,4 @@
-from common.pyreact import useState, useEffect, createElement as el, useContext
+from common.pyreact import useState, useEffect, react_component, useContext
 from common.pymui import Typography, AppBar, Toolbar, Tooltip, useSnackbar
 from common.pymui import Container, Box, Paper, CircularProgress
 from common.pymui import IconButton, CloseIcon, AddIcon
@@ -9,6 +9,7 @@ from views.bookList.bookListFilter import BooksFilterVu
 from views.bookList.bookListTable import BooksTable
 
 
+@react_component
 def BookList(props):
     params = props['params']
 
@@ -102,47 +103,45 @@ def BookList(props):
     useEffect(setEdit, [book_id])
     useEffect(getLookups, [])
 
-    return el(Container, None,
-              el(AppBar, {'position': 'static',
-                          'style': {'marginBottom': '0.5rem'}
-                         },
-                 el(Toolbar, {'variant': 'dense'},
-                    el(Tooltip, {'title': 'Add new book'},
-                       el(IconButton, {'edge': 'start',
-                                       'color': 'inherit',
-                                       'padding': 'none',
-                                       'onClick': handleAdd
-                                      }, el(AddIcon, None)
-                         )
-                      ) if isLoggedIn else None,
-                    el(Box, {'width': '100%'},
-                       el(Typography, {'variant': 'h6'}, "Books")
-                      ),
-                    el(IconButton, {'edge': 'end',
-                                    'color': 'inherit',
-                                    'onClick': lambda: spaRedirect('/')
-                                   }, el(CloseIcon, None)
-                      ),
-                   ),
-                ),
-              el(BooksFilterVu, {'categories': categories,
-                                 'setFilterParams': setFilterParams}
-                ),
-              el(Paper, {'style': {'padding': '0.5rem', 'marginTop': '0.8rem'}},
-                 el(BooksTable, {'books': books, 'setSortKey': setSortKey})
-                ),
-              el(BookEdit, {'bookId': bookModal,
-                            'categories': categories,
-                            'publishers': publishers,
-                            'formats': formats,
-                            'conditions': conditions,
-                            'getBooks': getBooks
-                           }),
-              el(CircularProgress,
-                 {'style': {'position': 'absolute',
-                            'top': '30%',
-                            'left': '50%',
-                            'marginLeft': -12}
-                 }) if showProgress else None
-             )
-
+    return Container(None,
+                     AppBar({'position': 'static',
+                             'style': {'marginBottom': '0.5rem'}
+                             },
+                            Toolbar({'variant': 'dense'},
+                                    Tooltip({'title': 'Add new book'},
+                                            IconButton({'edge': 'start',
+                                                        'color': 'inherit',
+                                                        'padding': 'none',
+                                                        'onClick': handleAdd
+                                                        }, AddIcon(None)
+                                                       )
+                                            ) if isLoggedIn else None,
+                                    Box({'width': '100%'},
+                                        Typography({'variant': 'h6'}, "Books")
+                                        ),
+                                    IconButton({'edge': 'end',
+                                                'color': 'inherit',
+                                                'onClick': lambda: spaRedirect('/')
+                                                }, CloseIcon(None)
+                                               ),
+                                    ),
+                            ),
+                     BooksFilterVu({'categories': categories,
+                                    'setFilterParams': setFilterParams}
+                                   ),
+                     Paper({'style': {'padding': '0.5rem', 'marginTop': '0.8rem'}},
+                           BooksTable({'books': books, 'setSortKey': setSortKey})
+                           ),
+                     BookEdit({'bookId': bookModal,
+                               'categories': categories,
+                               'publishers': publishers,
+                               'formats': formats,
+                               'conditions': conditions,
+                               'getBooks': getBooks
+                               }),
+                     CircularProgress({'style': {'position': 'absolute',
+                                                 'top': '30%',
+                                                 'left': '50%',
+                                                 'marginLeft': -12}
+                                       }) if showProgress else None
+                     )

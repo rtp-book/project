@@ -1,9 +1,10 @@
-from common.pyreact import render, createElement as el, ReactGA
+from common.pyreact import render, ReactGA, react_component
 from common.pyreact import useState, useEffect
+from common.pyreact import Div, H1, P, A
 from common.pymui import ThemeProvider, SnackbarProvider
 from common.jsutils import setTitle, console
 from common.urlutils import fetch, spaRedirect
-from main import UserCtx
+from main import UserCtxProvider
 from main.appTheme import theme
 from main.appData import gaid
 from views.bookList.bookListView import BookList
@@ -11,10 +12,11 @@ from views.landingPage.landingPageView import LandingPage
 
 
 ReactGA.initialize(gaid, {'titleCase': False, 'debug': False,
-                         'gaOptions': {'siteSpeedSampleRate': 100}}
-                  )
+                          'gaOptions': {'siteSpeedSampleRate': 100}}
+                   )
 
 
+@react_component
 def App(props):
     title = props['title']
     pathname = props['pathname']
@@ -66,21 +68,20 @@ def App(props):
     useEffect(lambda: ReactGA.pageview(pathname), [pathname])
 
     if route_is_valid:
-        return el(ThemeProvider, {'theme': theme},
-                  el(SnackbarProvider, {'maxSnack': 3},
-                     el(UserCtx.Provider, {'value': user_ctx},
-                        el(router[pathname], props)
-                       )
-                    )
-                 )
+        return ThemeProvider({'theme': theme},
+                             SnackbarProvider({'maxSnack': 3},
+                                              UserCtxProvider({'value': user_ctx},
+                                                              router[pathname](props)
+                                                              )
+                                              )
+                             )
     else:
         console.error(f"ERROR - Bad pathname for route: {props['pathname']}")
-        return el('div', None,
-                  el('h1', None, "Page Not Found"),
-                  el('p', None, f"Bad pathname: {props['pathname']}"),
-                  el('div', None, el('a', {'href': "/"}, "Back to Home"))
-                 )
+        return Div(None,
+                   H1(None, "Page Not Found"),
+                   P(None, f"Bad pathname: {props['pathname']}"),
+                   Div(None, A({'href': "/"}, "Back to Home"))
+                   )
 
 
 render(App, {'title': "Books"}, 'root')
-

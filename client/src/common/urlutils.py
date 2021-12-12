@@ -1,5 +1,5 @@
 import time
-from common.pyreact import ReactGA, createElement as el
+from common.pyreact import ReactGA, react_component
 from common.pymui import Link as MuiLink
 from common.jsutils import console
 
@@ -26,7 +26,7 @@ async def fetch(url, callback=None, **kwargs):
             response = await window.fetch(url, {'method': method,
                                                 'headers': headers,
                                                 'body': JSON.stringify(data)
-                                               }
+                                                }
                                           )
         else:
             kw_params = kwargs.pop('params', {})
@@ -63,11 +63,12 @@ async def fetch(url, callback=None, **kwargs):
         if on_error:
             on_error()
 
+
 # __pragma__ ('nokwargs')
 
 
 def buildParams(param_dict: dict):
-    param_list = [f"&{key}={window.encodeURIComponent(val)}" 
+    param_list = [f"&{key}={window.encodeURIComponent(val)}"
                   for key, val in param_dict.items() if val]
     params = ''.join(param_list)
     return f"?{params[1:]}" if len(params) > 0 else ''
@@ -97,6 +98,7 @@ def redirToLoginPage():
     window.location.href = hrefNew
 
 
+@react_component
 def Link(props):
     """Internal SPA link with browser history"""
 
@@ -109,9 +111,8 @@ def Link(props):
         props['onClick']()
 
     if props['onClick']:
-        return el(MuiLink, {'href': props['to'],
-                            'onClick': onClickAlt}, props['children'])
+        return MuiLink({'href': props['to'],
+                        'onClick': onClickAlt}, props['children'])
     else:
-        return el(MuiLink, {'href': props['to'],
-                            'onClick': onClick}, props['children'])
-
+        return MuiLink({'href': props['to'],
+                        'onClick': onClick}, props['children'])

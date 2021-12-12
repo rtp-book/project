@@ -1,4 +1,4 @@
-from common.pyreact import Modal, useState, useEffect, createElement as el
+from common.pyreact import Modal, useState, useEffect, react_component
 from common.pymui import Typography, AppBar, Toolbar, Box, Paper
 from common.pymui import IconButton, CloseIcon, useSnackbar
 from common.urlutils import fetch
@@ -13,6 +13,7 @@ lookup_tables = [
 ]
 
 
+@react_component
 def LookupTable(props):
     onClose = props['onClose']
     table_name = props['table']
@@ -29,7 +30,7 @@ def LookupTable(props):
     snack = useSnackbar()
 
     def on_update_error():
-        snack.enqueueSnackbar("Error updating lookup table!", 
+        snack.enqueueSnackbar("Error updating lookup table!",
                               {'variant': 'error'})
         getItems()
 
@@ -65,29 +66,28 @@ def LookupTable(props):
 
     useEffect(getItems, [table_name])
 
-    return el(Modal, {'isOpen': modalState,
-                      'style': modalStyles,
-                      'ariaHideApp': False,
-                     },
-              el(AppBar, {'position': 'static',
-                          'style': {'marginBottom': '0.5rem'}
+    return Modal({'isOpen': modalState,
+                  'style': modalStyles,
+                  'ariaHideApp': False,
+                  },
+                 AppBar({'position': 'static',
+                         'style': {'marginBottom': '0.5rem'}
                          },
-                 el(Toolbar, {'variant': 'dense'},
-                    el(Box, {'width': '100%'},
-                       el(Typography, {'variant': 'h6'}, f"Table: {table_name}")
-                      ),
-                    el(IconButton, {'edge': 'end',
-                                    'color': 'inherit',
-                                    'onClick': onClose
-                                   }, el(CloseIcon, None)
-                      ),
-                   ),
-                ),
-              el(Paper, {'style': {'padding': '0.5rem', 'marginTop': '0.8rem'}},
-                 el(ItemsList, {'items': items,
-                                'fields': table_fields,
-                                'saveItem': saveItem,
-                                'setItems': setItems})
-                )
-             )
-
+                        Toolbar({'variant': 'dense'},
+                                Box({'width': '100%'},
+                                    Typography({'variant': 'h6'}, f"Table: {table_name}")
+                                    ),
+                                IconButton({'edge': 'end',
+                                            'color': 'inherit',
+                                            'onClick': onClose
+                                            }, CloseIcon(None)
+                                           ),
+                                ),
+                        ),
+                 Paper({'style': {'padding': '0.5rem', 'marginTop': '0.8rem'}},
+                       ItemsList({'items': items,
+                                  'fields': table_fields,
+                                  'saveItem': saveItem,
+                                  'setItems': setItems})
+                       )
+                 )

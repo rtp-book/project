@@ -1,11 +1,10 @@
 from common.jsutils import confirm
-from common.pyreact import useState, useEffect, createElement as el, Modal
+from common.pyreact import useState, useEffect, react_component, Modal
 from common.pymui import Typography, AppBar, Toolbar, Box, useSnackbar
 from common.pymui import IconButton, CloseIcon
 from common.urlutils import fetch, spaRedirect
 from main.appTheme import modalStyles
 from views.bookEdit.bookEditForm import BookEditForm
-
 
 book_template = dict(
     ID=None,
@@ -26,6 +25,7 @@ book_template = dict(
 )
 
 
+@react_component
 def BookEdit(props):
     bookId = props['bookId']
     categories = props['categories']
@@ -98,7 +98,7 @@ def BookEdit(props):
             fetch(f"/api/book", _getBook,
                   params={'id': bookId},
                   onError=on_fetch_error
-                 )
+                  )
 
     def update_book():
         tmp_book = dict(bookInitial)
@@ -107,33 +107,32 @@ def BookEdit(props):
     useEffect(getBook, [bookId])
     useEffect(update_book, [bookInitial])
 
-    return el(Modal, {'isOpen': modalState,
-                      'style': modalStyles,
-                      'ariaHideApp': False,
-                     },
-              el(AppBar, {'position': 'static',
-                          'style': {'marginBottom': '0.5rem'}
+    return Modal({'isOpen': modalState,
+                  'style': modalStyles,
+                  'ariaHideApp': False,
+                  },
+                 AppBar({'position': 'static',
+                         'style': {'marginBottom': '0.5rem'}
                          },
-                 el(Toolbar, {'variant': 'dense'},
-                    el(Box, {'width': '100%'},
-                       el(Typography, {'variant': 'h6'}, book.Title)
-                      ),
-                    el(IconButton, {'edge': 'end',
-                                    'color': 'inherit',
-                                    'onClick': lambda: spaRedirect('/books')
-                                   }, el(CloseIcon, None)
-                      ),
-                   ),
-                ),
-              el(BookEditForm, {'book': book,
-                                'handleInputChange': handleInputChange,
-                                'categories': categories,
-                                'publishers': publishers,
-                                'formats': formats,
-                                'conditions': conditions,
-                                'isDirty': isDirty,
-                                'saveBook': saveBook,
-                                'deleteBook': deleteBook
+                        Toolbar({'variant': 'dense'},
+                                Box({'width': '100%'},
+                                    Typography({'variant': 'h6'}, book.Title)
+                                    ),
+                                IconButton({'edge': 'end',
+                                            'color': 'inherit',
+                                            'onClick': lambda: spaRedirect('/books')
+                                            }, CloseIcon(None)
+                                           ),
+                                ),
+                        ),
+                 BookEditForm({'book': book,
+                               'handleInputChange': handleInputChange,
+                               'categories': categories,
+                               'publishers': publishers,
+                               'formats': formats,
+                               'conditions': conditions,
+                               'isDirty': isDirty,
+                               'saveBook': saveBook,
+                               'deleteBook': deleteBook
                                }),
-             )
-
+                 )

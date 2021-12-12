@@ -1,6 +1,7 @@
-from common.pyreact import createElement as el
+from common.pyreact import react_component, Option
 
 
+@react_component
 def CategoriesList(props):
     categories = props['categories']
 
@@ -8,12 +9,13 @@ def CategoriesList(props):
         category_id = author['ID']
         category_name = author['Category']
 
-        return el('option', {'key': category_id,
-                             'value': category_name}, category_name)
+        return Option({'key': category_id,
+                       'value': category_name}, category_name)
 
     return [categoryToRow(category) for category in categories]
 
 
+@react_component
 def PublishersList(props):
     publishers = props['publishers']
 
@@ -21,12 +23,13 @@ def PublishersList(props):
         publisher_id = publisher['ID']
         publisher_name = publisher['Publisher']
 
-        return el('option', {'key': publisher_id,
-                             'value': publisher_name}, publisher_name)
+        return Option({'key': publisher_id,
+                       'value': publisher_name}, publisher_name)
 
     return [publisherToRow(publisher) for publisher in publishers]
 
 
+@react_component
 def ConditionsList(props):
     conditions = props['conditions']
 
@@ -35,12 +38,13 @@ def ConditionsList(props):
         condition_code = condition['Code']
         condition_name = condition['Condition']
 
-        return el('option', {'key': condition_id,
-                             'value': condition_code}, condition_name)
+        return Option({'key': condition_id,
+                       'value': condition_code}, condition_name)
 
     return [conditionToRow(condition) for condition in conditions]
 
 
+@react_component
 def FormatsList(props):
     formats = props['formats']
 
@@ -48,8 +52,7 @@ def FormatsList(props):
         format_id = publisher['ID']
         format_name = publisher['Format']
 
-        return el('option', {'key': format_id,
-                             'value': format_name}, format_name)
+        return Option({'key': format_id,
+                       'value': format_name}, format_name)
 
     return [formatToRow(format_) for format_ in formats]
-
