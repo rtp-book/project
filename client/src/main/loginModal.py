@@ -1,4 +1,4 @@
-from common.pyreact import react_component, Modal, Form
+from common.pyreact import react_component, Modal, HTML
 from common.pymui import Box, Paper, TextField, Button, Typography
 from common.pymui import IconButton, CloseIcon
 from main.appData import appname
@@ -44,31 +44,31 @@ def Login(props):
                                                        'onClick': onClose}, CloseIcon(None))
                                            ),
                                    Paper({'elevation': 2, 'style': {'padding': '1rem'}},
-                                         Form({'onSubmit': login},
-                                              TextField({'label': 'Login Name',
-                                                         'variant': 'outlined',
-                                                         'fullWidth': True,
-                                                         'value': username,
-                                                         'onChange': handleUsernameChange,
-                                                         'autoFocus': True
-                                                         }
-                                                        ),
-                                              TextField({'label': 'Password',
-                                                         'variant': 'outlined',
-                                                         'fullWidth': True,
-                                                         'type': 'password',
-                                                         'value': password,
-                                                         'onChange': handlePasswordChange
-                                                         }
-                                                        ),
-                                              Button({'type': 'submit',
-                                                      'fullWidth': True,
-                                                      'style': {'minWidth': '10rem',
-                                                                'marginRight': '1rem',
-                                                                'marginTop': '1rem'},
-                                                      }, "Login"
-                                                     ),
-                                              )
+                                         HTML.Form({'onSubmit': login},
+                                                   TextField({'label': 'Login Name',
+                                                              'variant': 'outlined',
+                                                              'fullWidth': True,
+                                                              'value': username,
+                                                              'onChange': handleUsernameChange,
+                                                              'autoFocus': True
+                                                              }
+                                                             ),
+                                                   TextField({'label': 'Password',
+                                                              'variant': 'outlined',
+                                                              'fullWidth': True,
+                                                              'type': 'password',
+                                                              'value': password,
+                                                              'onChange': handlePasswordChange
+                                                              }
+                                                             ),
+                                                   Button({'type': 'submit',
+                                                           'fullWidth': True,
+                                                           'style': {'minWidth': '10rem',
+                                                                     'marginRight': '1rem',
+                                                                     'marginTop': '1rem'},
+                                                           }, "Login"
+                                                          ),
+                                                   )
                                          )
                                    )
                                )

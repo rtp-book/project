@@ -1,6 +1,5 @@
-from common.pyreact import render, ReactGA, react_component
-from common.pyreact import useState, useEffect
-from common.pyreact import Div, H1, P, A
+from common.pyreact import render, ReactGA, useState, useEffect
+from common.pyreact import react_component, HTML
 from common.pymui import ThemeProvider, SnackbarProvider
 from common.jsutils import setTitle, console
 from common.urlutils import fetch, spaRedirect
@@ -9,7 +8,6 @@ from main.appTheme import theme
 from main.appData import gaid
 from views.bookList.bookListView import BookList
 from views.landingPage.landingPageView import LandingPage
-
 
 ReactGA.initialize(gaid, {'titleCase': False, 'debug': False,
                           'gaOptions': {'siteSpeedSampleRate': 100}}
@@ -77,11 +75,11 @@ def App(props):
                              )
     else:
         console.error(f"ERROR - Bad pathname for route: {props['pathname']}")
-        return Div(None,
-                   H1(None, "Page Not Found"),
-                   P(None, f"Bad pathname: {props['pathname']}"),
-                   Div(None, A({'href': "/"}, "Back to Home"))
-                   )
+        return HTML.Div(None,
+                        HTML.H1(None, "Page Not Found"),
+                        HTML.P(None, f"Bad pathname: {props['pathname']}"),
+                        HTML.Div(None, HTML.A({'href': "/"}, "Back to Home"))
+                        )
 
 
 render(App, {'title': "Books"}, 'root')

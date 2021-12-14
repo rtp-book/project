@@ -1,4 +1,4 @@
-from common.pyreact import useState, react_component, Fragment, Input
+from common.pyreact import useState, react_component, Fragment, HTML
 from common.pymui import Box, AddIcon, IconButton
 from common.pymui import TableContainer, Table
 from common.pymui import TableHead, TableBody, TableRow, TableCell
@@ -29,12 +29,12 @@ def ItemEditCell(props):
             checkSaveItem()
 
     return TableCell(None,
-                     Input({'id': field,
-                            'onKeyPress': handleKeyPress,
-                            'onChange': handleChange,
-                            'value': field_value,
-                            'style': {'width': '10rem', 'margin': '-4px'}}
-                           )
+                     HTML.Input({'id': field,
+                                 'onKeyPress': handleKeyPress,
+                                 'onChange': handleChange,
+                                 'value': field_value,
+                                 'style': {'width': '10rem', 'margin': '-4px'}}
+                                )
                      )
 
 

@@ -1,4 +1,4 @@
-from common.pyreact import useState, react_component, Option
+from common.pyreact import useState, react_component, HTML
 from common.pymui import TextField, Button, Paper
 from main.appTheme import Flexbox
 from views.bookEdit.bookEditLookups import CategoriesList
@@ -67,9 +67,9 @@ def BooksFilterVu(props):
                                     'select': True,
                                     'SelectProps': {'native': True},
                                     },
-                                   Option({'value': ''}, ""),
-                                   Option({'value': '1'}, "Fiction"),
-                                   Option({'value': '0'}, "Non-Fiction"),
+                                   HTML.Option({'value': ''}, ""),
+                                   HTML.Option({'value': '1'}, "Fiction"),
+                                   HTML.Option({'value': '0'}, "Non-Fiction"),
                                    ),
                          TextField({'label': "Category",
                                     'name': 'Category',
@@ -79,7 +79,7 @@ def BooksFilterVu(props):
                                     'select': True,
                                     'SelectProps': {'native': True},
                                     },
-                                   Option({'value': ''}),
+                                   HTML.Option({'value': ''}),
                                    CategoriesList({'categories': categories}),
                                    ),
                          TextField({'label': "ISBN",
