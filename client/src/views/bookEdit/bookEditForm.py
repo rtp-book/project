@@ -1,4 +1,4 @@
-from common.pyreact import react_component, useContext, HTML
+from common.pyreact import react_component, useContext, Option
 from common.pymui import TextField, RadioGroup, FormControlLabel, Radio, Button
 from common.pymui import Paper, Divider, Typography
 from main import UserCtx
@@ -53,7 +53,7 @@ def BookEditForm(props):
                                             'SelectProps': {'native': True},
                                             'disabled': read_only
                                             },
-                                           HTML.Option({'value': ''}),
+                                           Option({'value': ''}),
                                            PublishersList({'publishers': publishers}),
                                            ),
                                  ),
@@ -74,7 +74,7 @@ def BookEditForm(props):
                                                                     'SelectProps': {'native': True},
                                                                     'disabled': read_only
                                                                     },
-                                                                   HTML.Option({'value': ''}),
+                                                                   Option({'value': ''}),
                                                                    CategoriesList({'categories': categories}),
                                                                    ),
 
@@ -129,7 +129,7 @@ def BookEditForm(props):
                                                     'SelectProps': {'native': True},
                                                     'disabled': read_only
                                                     },
-                                                   HTML.Option({'value': ''}),
+                                                   Option({'value': ''}),
                                                    FormatsList({'formats': formats}),
                                                    ),
                                          TextField({'label': "ISBN",
@@ -174,7 +174,7 @@ def BookEditForm(props):
                                             'SelectProps': {'native': True},
                                             'disabled': read_only
                                             },
-                                           HTML.Option({'value': ''}),
+                                           Option({'value': ''}),
                                            ConditionsList({'conditions': conditions}),
                                            ),
                                  TextField({'label': "Location",

@@ -1,4 +1,4 @@
-from common.pyreact import react_component, Modal, HTML
+from common.pyreact import react_component, Modal, Img
 from common.pymui import Paper, Typography, IconButton, CloseIcon, Divider
 from main.appData import applogo, appname
 from main.appTheme import Flexbox, FlexboxCenter, modalStyles
@@ -27,7 +27,7 @@ def About(props):
                          ),
                  Paper({'style': {'padding': '1rem'}},
                        FlexboxCenter({'maxWidth': '400px'},
-                                     HTML.Img({'src': applogo, 'width': '80%'})
+                                     Img({'src': applogo, 'width': '80%'})
                                      ),
                        ),
                  Paper({'style': {'padding': '0.5rem', 'marginTop': '1rem'}},

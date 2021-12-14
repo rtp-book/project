@@ -1,4 +1,4 @@
-from common.pyreact import react_component, HTML
+from common.pyreact import react_component, Option
 
 
 @react_component
@@ -9,8 +9,8 @@ def CategoriesList(props):
         category_id = author['ID']
         category_name = author['Category']
 
-        return HTML.Option({'key': category_id,
-                            'value': category_name}, category_name)
+        return Option({'key': category_id,
+                       'value': category_name}, category_name)
 
     return [categoryToRow(category) for category in categories]
 
@@ -23,8 +23,8 @@ def PublishersList(props):
         publisher_id = publisher['ID']
         publisher_name = publisher['Publisher']
 
-        return HTML.Option({'key': publisher_id,
-                            'value': publisher_name}, publisher_name)
+        return Option({'key': publisher_id,
+                       'value': publisher_name}, publisher_name)
 
     return [publisherToRow(publisher) for publisher in publishers]
 
@@ -38,8 +38,8 @@ def ConditionsList(props):
         condition_code = condition['Code']
         condition_name = condition['Condition']
 
-        return HTML.Option({'key': condition_id,
-                            'value': condition_code}, condition_name)
+        return Option({'key': condition_id,
+                       'value': condition_code}, condition_name)
 
     return [conditionToRow(condition) for condition in conditions]
 
@@ -52,7 +52,7 @@ def FormatsList(props):
         format_id = publisher['ID']
         format_name = publisher['Format']
 
-        return HTML.Option({'key': format_id,
-                            'value': format_name}, format_name)
+        return Option({'key': format_id,
+                       'value': format_name}, format_name)
 
     return [formatToRow(format_) for format_ in formats]
