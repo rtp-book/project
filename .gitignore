@@ -9,6 +9,9 @@ venv/
 __target__/
 dist/
 .cache/
+.build/
+.parcel-cache/
+parcel-bundle-reports/
 node_modules/
 __pycache__/
 
