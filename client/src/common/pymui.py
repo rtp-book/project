@@ -46,7 +46,7 @@ TableCell = require('@material-ui/core/TableCell')['default']
 
 # Theming
 ThemeProvider = require('@material-ui/styles/ThemeProvider')['default']
-createMuiTheme = require('@material-ui/core/styles/createMuiTheme')['default']
+createMuiTheme = require('@material-ui/core/styles/createTheme')['default']
 useTheme = require('@material-ui/styles/useTheme')['default']
 styled = require('@material-ui/styles/styled')['default']
 makeStyles = require('@material-ui/styles/makeStyles')['default']
